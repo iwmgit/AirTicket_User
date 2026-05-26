@@ -221,34 +221,20 @@ const SearchForm = ({
                 Departure date
               </label>
               <div className="relative">
-                <div className="h-14 rounded-2xl border border-gray-200 bg-white flex items-center px-4">
+                <div className="h-14 rounded-2xl border border-gray-200 bg-white flex items-center px-4 pointer-events-none select-none">
                   <span className="mr-3 text-gray-400">{CalendarIcon}</span>
-                  <input
-                    type="text"
-                    readOnly
-                    value={formatDisplayDate(searchData.departureDate)}
-                    placeholder="Jan 15"
-                    onClick={() => {
-                      const el = document.getElementById("departure-date");
-                      if (el?.showPicker) el.showPicker();
-                      else if (el) el.click();
-                    }}
-                    className="w-full bg-transparent outline-none text-base text-slate-700 placeholder:text-gray-400 cursor-pointer"
-                  />
+                  <span className={`text-base ${searchData.departureDate ? "text-slate-700" : "text-gray-400"}`}>
+                    {formatDisplayDate(searchData.departureDate) || "Jan 15"}
+                  </span>
                 </div>
-
                 <input
-                  id="departure-date"
                   type="date"
                   value={searchData.departureDate}
                   onChange={(e) =>
-                    setSearchData({
-                      ...searchData,
-                      departureDate: e.target.value,
-                    })
+                    setSearchData({ ...searchData, departureDate: e.target.value })
                   }
-                  className="absolute inset-0 opacity-0 pointer-events-none"
-                  tabIndex={-1}
+                  onClick={(e) => e.currentTarget.showPicker?.()}
+                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                 />
               </div>
             </div>
@@ -259,34 +245,20 @@ const SearchForm = ({
                   Return date
                 </label>
                 <div className="relative">
-                  <div className="h-14 rounded-2xl border border-gray-200 bg-white flex items-center px-4">
+                  <div className="h-14 rounded-2xl border border-gray-200 bg-white flex items-center px-4 pointer-events-none select-none">
                     <span className="mr-3 text-gray-400">{CalendarIcon}</span>
-                    <input
-                      type="text"
-                      readOnly
-                      value={formatDisplayDate(searchData.returnDate)}
-                      placeholder="Jan 22"
-                      onClick={() => {
-                        const el = document.getElementById("return-date");
-                        if (el?.showPicker) el.showPicker();
-                        else if (el) el.click();
-                      }}
-                      className="w-full bg-transparent outline-none text-base text-slate-700 placeholder:text-gray-400 cursor-pointer"
-                    />
+                    <span className={`text-base ${searchData.returnDate ? "text-slate-700" : "text-gray-400"}`}>
+                      {formatDisplayDate(searchData.returnDate) || "Jan 22"}
+                    </span>
                   </div>
-
                   <input
-                    id="return-date"
                     type="date"
                     value={searchData.returnDate}
                     onChange={(e) =>
-                      setSearchData({
-                        ...searchData,
-                        returnDate: e.target.value,
-                      })
+                      setSearchData({ ...searchData, returnDate: e.target.value })
                     }
-                    className="absolute inset-0 opacity-0 pointer-events-none"
-                    tabIndex={-1}
+                    onClick={(e) => e.currentTarget.showPicker?.()}
+                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                   />
                 </div>
               </div>

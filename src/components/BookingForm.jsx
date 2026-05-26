@@ -747,25 +747,15 @@ export default function BookingForm({
                   Date of Birth
                 </label>
                 <div className="relative">
-                  <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
-                    {CalendarIcon}
-                  </span>
-
+                  <div className={`${inputWithIconBase} pointer-events-none select-none flex items-center`}>
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+                      {CalendarIcon}
+                    </span>
+                    <span className={p.dob ? "text-gray-800" : "text-gray-400"}>
+                      {formatDateForInputDisplay(p.dob) || "MM/DD/YYYY"}
+                    </span>
+                  </div>
                   <input
-                    type="text"
-                    value={formatDateForInputDisplay(p.dob)}
-                    placeholder="MM/DD/YYYY"
-                    readOnly
-                    onClick={() => {
-                      const el = document.getElementById(`dob-${index}`);
-                      if (el?.showPicker) el.showPicker();
-                      else if (el) el.click();
-                    }}
-                    className={inputWithIconBase + " cursor-pointer"}
-                  />
-
-                  <input
-                    id={`dob-${index}`}
                     type="date"
                     value={p.dob}
                     onChange={(e) =>
@@ -773,9 +763,8 @@ export default function BookingForm({
                         target: { name: "dob", value: e.target.value },
                       })
                     }
-                    className="absolute inset-0 opacity-0 pointer-events-none"
-                    tabIndex={-1}
-                    aria-hidden="true"
+                    onClick={(e) => e.currentTarget.showPicker?.()}
+                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                   />
                 </div>
               </div>
