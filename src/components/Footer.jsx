@@ -1,43 +1,61 @@
-import { FaFacebookF, FaFacebookMessenger, FaViber } from "react-icons/fa";
-
 function Footer() {
   return (
-    <footer className="bg-gray-900 text-gray-300 mt-20">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 text-gray-400">
+    <footer className="bg-[#041633] text-gray-300 mt-0">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 text-gray-500">
+          
+          {/* Contact Us */}
           <div>
-            <h4 className="text-white font-semibold mb-4">Contact Us</h4>
-            <p className="text-sm">Email: support@flights.com</p>
-            <p className="text-sm mt-2">Phone: 1-800-FLIGHTS</p>
+            <h4 className="text-white font-semibold mb-4">
+              Contact Us
+            </h4>
+
+            <p className="text-sm">
+              Email: support@flights.com
+            </p>
+
+            <p className="text-sm mt-3">
+              Phone: 1-800-FLIGHTS
+            </p>
           </div>
 
-          <div className="text-center">
-            <h4 className="text-white font-semibold mb-4">Social Media</h4>
-            <div className="flex justify-center gap-6">
+          {/* Social Media */}
+          <div>
+            <h4 className="text-white font-semibold mb-4">
+              Social Media
+            </h4>
+
+            <div className="space-y-3">
               <a
                 href="#"
-                className="text-2xl text-gray-300 hover:text-blue-600 transition"
+                className="block text-sm text-gray-500 hover:text-white transition"
               >
-                <FaFacebookF />
+                Facebook
               </a>
+
               <a
                 href="#"
-                className="text-2xl text-gray-300 hover:text-blue-500 transition"
+                className="block text-sm text-gray-500 hover:text-white transition"
               >
-                <FaFacebookMessenger />
+                Messenger
               </a>
+
               <a
                 href="#"
-                className="text-2xl text-gray-300 hover:text-purple-500 transition"
+                className="block text-sm text-gray-500 hover:text-white transition"
               >
-                <FaViber />
+                Viber
               </a>
             </div>
           </div>
 
-          <div className="md:text-right">
-            <h4 className="text-white font-semibold mb-4">Address</h4>
-            <p className="text-sm">
+          {/* Address */}
+          <div>
+            <h4 className="text-white font-semibold mb-4">
+              Address
+            </h4>
+
+            <p className="text-sm uppercase">
               JOHN SMITH, 123 MAIN STREET, SUITE 678,
               <br />
               OTTAWA, ON K1A 0B1, CANADA
@@ -45,7 +63,8 @@ function Footer() {
           </div>
         </div>
 
-        <div className="border-t border-gray-800 mt-10 pt-8 text-center text-sm">
+        {/* Bottom Copyright */}
+        <div className="border-t border-gray-800 mt-10 pt-6 text-center text-sm text-gray-500">
           <p>&copy; 2026 Flight Booking. All rights reserved.</p>
         </div>
       </div>

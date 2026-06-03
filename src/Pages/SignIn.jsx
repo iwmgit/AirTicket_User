@@ -7,6 +7,7 @@ import { FaEnvelope, FaLock, FaUser, FaPhoneAlt, FaTimes, FaEye, FaEyeSlash } fr
 export default function SignIn({ open = true, setOpen }) {
   const [screen, setScreen] = useState("login");
   const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     full_name: "",
     phone: "",
@@ -14,6 +15,7 @@ export default function SignIn({ open = true, setOpen }) {
     password: "",
     confirmPassword: "",
   });
+
   const { login, register, loading, error: authError } = useAuth();
   const [error, setError] = useState("");
   const [verificationPending, setVerificationPending] = useState(false);
@@ -36,6 +38,7 @@ export default function SignIn({ open = true, setOpen }) {
   const handleLogin = async (e) => {
     e.preventDefault();
     setError("");
+
     try {
       await login(formData.email, formData.password);
       close();
@@ -74,6 +77,7 @@ export default function SignIn({ open = true, setOpen }) {
         full_name: formData.full_name,
         phone: formData.phone,
       });
+
       setVerificationPending(true);
       setScreen("verify");
     } catch (err) {
@@ -91,9 +95,9 @@ export default function SignIn({ open = true, setOpen }) {
   const handleResendVerification = async () => {
     setResendLoading(true);
     setError("");
+
     try {
       await resendVerificationEmail({ email: formData.email });
-      setError("");
       alert("Verification email sent! Please check your inbox.");
     } catch (err) {
       setError(
@@ -117,17 +121,22 @@ export default function SignIn({ open = true, setOpen }) {
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className={`bg-white rounded-2xl shadow-2xl overflow-hidden ${
-          isModal ? "w-full max-w-md" : "w-full max-w-md"
-        }`}
+        className="bg-white rounded-2xl shadow-2xl overflow-hidden w-full max-w-md"
       >
         {/* Header */}
-        <div className={`flex items-center justify-between px-8 pt-6 ${
-          isModal ? "border-b border-gray-200" : ""
-        }`}>
+        <div
+          className={`flex items-center justify-between px-8 pt-6 ${
+            isModal ? "border-b border-gray-200" : ""
+          }`}
+        >
           <h2 className="text-2xl font-bold text-gray-900">
-            {screen === "login" ? "Welcome Back" : "Create Account"}
+            {screen === "login"
+              ? "Welcome Back"
+              : screen === "register"
+              ? "Create Account"
+              : "Verify Email"}
           </h2>
+
           {isModal && (
             <button
               onClick={close}
@@ -139,36 +148,43 @@ export default function SignIn({ open = true, setOpen }) {
         </div>
 
         {/* Tab Navigation */}
-        <div className={`flex border-b border-gray-200 ${!isModal ? "bg-gray-50" : ""}`}>
-          <button
-            onClick={() => {
-              setScreen("login");
-              setError("");
-              setVerificationPending(false);
-            }}
-            className={`flex-1 py-4 text-sm font-semibold transition-all ${
-              screen === "login"
-                ? "border-b-2 border-blue-600 text-blue-600 bg-white"
-                : "text-gray-600 hover:text-gray-900"
+        {screen !== "verify" && (
+          <div
+            className={`flex border-b border-gray-200 ${
+              !isModal ? "bg-gray-50" : ""
             }`}
           >
-            Sign In
-          </button>
-          <button
-            onClick={() => {
-              setScreen("register");
-              setError("");
-              setVerificationPending(false);
-            }}
-            className={`flex-1 py-4 text-sm font-semibold transition-all ${
-              screen === "register"
-                ? "border-b-2 border-blue-600 text-blue-600 bg-white"
-                : "text-gray-600 hover:text-gray-900"
-            }`}
-          >
-            Sign Up
-          </button>
-        </div>
+            <button
+              onClick={() => {
+                setScreen("login");
+                setError("");
+                setVerificationPending(false);
+              }}
+              className={`flex-1 py-4 text-sm font-semibold transition-all ${
+                screen === "login"
+                  ? "border-b-2 border-blue-600 text-blue-600 bg-white"
+                  : "text-gray-600 hover:text-gray-900"
+              }`}
+            >
+              Log In
+            </button>
+
+            <button
+              onClick={() => {
+                setScreen("register");
+                setError("");
+                setVerificationPending(false);
+              }}
+              className={`flex-1 py-4 text-sm font-semibold transition-all ${
+                screen === "register"
+                  ? "border-b-2 border-blue-600 text-blue-600 bg-white"
+                  : "text-gray-600 hover:text-gray-900"
+              }`}
+            >
+              Register
+            </button>
+          </div>
+        )}
 
         <div className="p-8">
           {displayError && (
@@ -181,8 +197,9 @@ export default function SignIn({ open = true, setOpen }) {
             <form onSubmit={handleLogin} className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Email Address
+                  Email/Username
                 </label>
+
                 <div className="relative">
                   <FaEnvelope className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm" />
                   <input
@@ -191,7 +208,7 @@ export default function SignIn({ open = true, setOpen }) {
                     value={formData.email}
                     onChange={onChange}
                     className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
-                    placeholder="you@example.com"
+                    placeholder="Enter your email or username"
                     required
                   />
                 </div>
@@ -201,6 +218,7 @@ export default function SignIn({ open = true, setOpen }) {
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Password
                 </label>
+
                 <div className="relative">
                   <FaLock className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm" />
                   <input
@@ -225,7 +243,7 @@ export default function SignIn({ open = true, setOpen }) {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white py-3 rounded-lg font-semibold hover:from-blue-700 hover:to-blue-800 disabled:opacity-50 disabled:cursor-not-allowed transition transform hover:scale-105"
+                className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition"
               >
                 {loading ? "Signing In..." : "Sign In"}
               </button>
@@ -233,15 +251,30 @@ export default function SignIn({ open = true, setOpen }) {
               <div className="text-center">
                 <Link
                   to="/forgot-password"
-                  className="text-sm text-blue-600 hover:text-blue-700 font-medium transition"
-                  onClick={(e) => {
-                    if (isModal) {
-                      close();
-                    }
+                  className="text-sm text-gray-600 hover:text-blue-700 underline transition"
+                  onClick={() => {
+                    if (isModal) close();
                   }}
                 >
-                  Forgot your password?
+                  Forgot Password?
                 </Link>
+              </div>
+
+              <div className="border-t border-gray-200 pt-4 text-center">
+                <p className="text-sm text-gray-500">
+                  Don't have an account{" "}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setScreen("register");
+                      setError("");
+                      setVerificationPending(false);
+                    }}
+                    className="text-blue-600 font-medium hover:underline"
+                  >
+                    Register
+                  </button>
+                </p>
               </div>
             </form>
           )}
@@ -252,6 +285,7 @@ export default function SignIn({ open = true, setOpen }) {
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Full Name
                 </label>
+
                 <div className="relative">
                   <FaUser className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm" />
                   <input
@@ -270,6 +304,7 @@ export default function SignIn({ open = true, setOpen }) {
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Phone Number
                 </label>
+
                 <div className="relative">
                   <FaPhoneAlt className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm" />
                   <input
@@ -288,6 +323,7 @@ export default function SignIn({ open = true, setOpen }) {
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Email Address
                 </label>
+
                 <div className="relative">
                   <FaEnvelope className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm" />
                   <input
@@ -306,6 +342,7 @@ export default function SignIn({ open = true, setOpen }) {
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Password
                 </label>
+
                 <div className="relative">
                   <FaLock className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm" />
                   <input
@@ -331,6 +368,7 @@ export default function SignIn({ open = true, setOpen }) {
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Confirm Password
                 </label>
+
                 <div className="relative">
                   <FaLock className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm" />
                   <input
@@ -355,7 +393,7 @@ export default function SignIn({ open = true, setOpen }) {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white py-3 rounded-lg font-semibold hover:from-blue-700 hover:to-blue-800 disabled:opacity-50 disabled:cursor-not-allowed transition transform hover:scale-105"
+                className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition"
               >
                 {loading ? "Creating Account..." : "Create Account"}
               </button>
@@ -369,16 +407,19 @@ export default function SignIn({ open = true, setOpen }) {
           {screen === "verify" && verificationPending && (
             <div className="text-center py-4">
               <div className="mb-4 text-4xl">✉️</div>
+
               <h3 className="text-lg font-semibold text-gray-900 mb-2">
                 Verify Your Email
               </h3>
+
               <p className="text-gray-600 text-sm mb-6">
                 We&apos;ve sent a verification link to <br />
                 <strong className="text-gray-900">{formData.email}</strong>
               </p>
+
               <p className="text-gray-600 text-sm mb-6">
-                Please check your inbox and click the verification link to
-                complete your registration.
+                Please check your inbox and click the verification link to complete
+                your registration.
               </p>
 
               <button
